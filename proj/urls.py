@@ -14,9 +14,24 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
+from django.urls import include, path, re_path
+# from django.conf.urls import url
+# from django.conf.global_settings import STATICFILES_DIRS
+from django.conf import settings
+# from proj import settings
+from django.views.static import serve
+import os
+
+print('STATIC_URL' + str(settings.STATIC_URL))
+print('STATIC_ROOT' + str(settings.STATIC_ROOT))
+print('STATICFILES_DIRS' + str(settings.STATICFILES_DIRS))
+
+static_url = r'^{}/(?P<path>.*)$'.format(settings.STATIC_URL.replace('/', ''))
+print('static url server:' + str(static_url))
 
 urlpatterns = [
+    # 配置静态文件代理
+    re_path(static_url, serve, {'document_root': settings.STATIC_ROOT}),
     path('admin/', admin.site.urls),
     path('insight/', include('insight.urls')),
 ]

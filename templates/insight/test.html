@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <script src="{% static "insight/js/test.js" %}"></script>
+</head>
+<body>
+STATIC_URL:{{ STATIC_URL }}
+<br>
+STATIC_DIR:{{ STATIC_DIR }}
+<br>
+STATIC_ROOT:{{ STATIC_ROOT }}
+<br>
+
+{% static ""  %}
+</body>
+<script type="text/javascript">
+    //alert('test')
+
+</script>
+
+</html>

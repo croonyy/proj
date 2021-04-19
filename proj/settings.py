@@ -11,10 +11,13 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = 1
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -22,11 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-3-s17tm+%fv%k2o$uudc$h^57#pyy*k8d3hav!&qi(*6rs6=vd'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# DEBUG = True
 ALLOWED_HOSTS = ['*']
-
 
 # Application definition
 
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'insight',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +55,7 @@ ROOT_URLCONF = 'proj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -69,25 +70,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'proj.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': BASE_DIR / 'db.sqlite3',
-#    }
+    #    'default': {
+    #        'ENGINE': 'django.db.backends.sqlite3',
+    #        'NAME': BASE_DIR / 'db.sqlite3',
+    #    }
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 数据库引擎
         'NAME': 'proj',  # 你要存储数据的库名，事先要创建之
         'USER': 'croonyy',  # 数据库用户名
         'PASSWORD': 'Croonyy@123456',  # 密码
-        'HOST': 'localhost',  # 主机
+        'HOST': '192.168.2.2',  # 主机
         'PORT': '3306',  # 数据库使用的端口
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -107,7 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -121,22 +119,21 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/static/'
-
-#STATIC_ROOT=os.path.join(BASE_DIR,'static')
-
-#STATICFILES_DIRS=[
-#    os.path.join(BASE_DIR,'static')
-#]
+STATICFILES_DIRS = []
+# debug=True的时候默认使用app下面的static文件夹和staticfiles_dir指定的文件夹(此时staticfiles_dir不能跟static_root一样)
+# ，静态文件服务URL以static_url开头
+if DEBUG == True:
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
+    STATICFILES_DIRS.append(os.path.join(BASE_DIR, 'static_all'))
+else:
+    STATIC_URL = '/static_all/'
+    STATIC_ROOT = os.path.join(BASE_DIR, "static_all")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
